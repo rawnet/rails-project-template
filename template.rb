@@ -53,6 +53,7 @@ group :development do
   gem 'letter_opener'
   gem 'capistrano', '~> 2'
   gem 'pry-rails'
+  gem 'bundler-audit'
 end
 
 group :test, :development do
@@ -68,6 +69,7 @@ group :test do
 end
 
 gem 'puma'
+gem 'puma_worker_killer'
 gem 'bugsnag'
 gem 'rack-attack'
 RUBY
@@ -176,7 +178,7 @@ namespace :symlinks do
   task :database do
     symlink "\#{shared_path}/config/database.yml", "\#{release_path}/config/database.yml"
   end
-  
+
   task :secrets do
     symlink "\#{shared_path}/config/secrets.yml", "\#{release_path}/config/secrets.yml"
   end
