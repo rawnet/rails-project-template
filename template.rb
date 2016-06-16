@@ -53,13 +53,13 @@ group :development do
   gem 'letter_opener'
   gem 'capistrano', '~> 2'
   gem 'pry-rails'
-  gem 'bundler-audit'
 end
 
 group :test, :development do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'simplecov', require: false
+  gem 'bundler-audit'
 end
 
 group :test do
