@@ -163,13 +163,13 @@ set :user, 'rails'
 set(:deploy_to) { File.join('', 'home', user, 'apps', application, stage.to_s) }
 ssh_options[:forward_agent] = true
 
-set :slack_webhook_url, "<slack webhook url starting https://hooks.slack.com>"
+set :slack_webhook_url, '<slack webhook url starting https://hooks.slack.com>'
 set :slack_room, '<slack channel>'
 
 namespace :deploy do
   task :restart do
     run "kill -USR2 `cat \#{current_path}/tmp/pids/puma.pid`"
-    run "for pidfile in #{current_path}/tmp/pids/resque.*.pid; do kill -QUIT `cat $pidfile`; rm $pidfile; done"
+    run "for pidfile in \#{current_path}/tmp/pids/resque.*.pid; do kill -QUIT `cat $pidfile`; rm $pidfile; done"
   end
 end
 
