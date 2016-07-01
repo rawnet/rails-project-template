@@ -176,14 +176,14 @@ namespace :symlinks do
   task :database do
     symlink "\#{shared_path}/config/database.yml", "\#{release_path}/config/database.yml"
   end
-  
+
   task :secrets do
     symlink "\#{shared_path}/config/secrets.yml", "\#{release_path}/config/secrets.yml"
   end
 end
 
 before "deploy:assets:precompile", "symlinks:database", "symlinks:secrets"
-after "deploy:update", "deploy:cleanup" 
+after "deploy:update", "deploy:migrate", "deploy:cleanup"
 
 require './config/boot'
 RUBY
@@ -221,7 +221,7 @@ List any other enviornment URL here.
 
 ## Getting Started & Running Locally
 
-Detail how to get the project running locally, including any commands, 
+Detail how to get the project running locally, including any commands,
 requirements or 3rd party tools that need to be installed. For Rails projects, this
 may state if the project uses `rails s`, `script/server` or `foreman start`.
 
