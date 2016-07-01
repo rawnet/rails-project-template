@@ -59,6 +59,7 @@ group :test, :development do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'simplecov', require: false
+  gem 'bundler-audit'
 end
 
 group :test do
@@ -68,6 +69,7 @@ group :test do
 end
 
 gem 'puma'
+gem 'puma_worker_killer'
 gem 'bugsnag'
 gem 'rack-attack'
 RUBY
@@ -176,7 +178,7 @@ namespace :symlinks do
   task :database do
     symlink "\#{shared_path}/config/database.yml", "\#{release_path}/config/database.yml"
   end
-  
+
   task :secrets do
     symlink "\#{shared_path}/config/secrets.yml", "\#{release_path}/config/secrets.yml"
   end
