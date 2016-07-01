@@ -41,11 +41,10 @@ puts
 
 create_file '.ruby-version', "#{RUBY_VERSION}\n"
 
-append_to_file 'Gemfile', <<-RUBY
-\ngem 'simple_form'
+gem 'simple_form'
 gem 'high_voltage'
 
-group :development do
+gem_group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'quiet_assets'
@@ -55,14 +54,14 @@ group :development do
   gem 'pry-rails'
 end
 
-group :test, :development do
+gem_group :test, :development do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'simplecov', require: false
   gem 'bundler-audit'
 end
 
-group :test do
+gem_group :test do
   gem 'shoulda-matchers'
   gem 'database_cleaner'
   gem 'timecop'
@@ -73,7 +72,6 @@ gem 'puma_worker_killer'
 gem 'bugsnag'
 gem 'rack-attack'
 gem 'capistrano-slack-notify'
-RUBY
 
 gsub_file 'Gemfile', /(#(.+)\n)?gem ('|")turbolinks('|")\n/, ''
 gsub_file 'app/assets/javascripts/application.js', /\/\/= require turbolinks\n/, ''
