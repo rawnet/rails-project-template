@@ -78,8 +78,8 @@ gsub_file 'app/assets/javascripts/application.js', /\/\/= require turbolinks\n/,
 
 run 'bundle install'
 
-inject_into_file 'config/application.rb', "    config.middleware.insert_before ActionDispatch::ParamsParser, Rack::Attack\n\n", after: "  class Application < Rails::Application\n"
-inject_into_file 'config/environments/development.rb', "  config.action_mailer.delivery_method = :letter_opener\n\n", after: "Application.configure do\n"
+environment 'config.middleware.insert_before ActionDispatch::ParamsParser, Rack::Attack'
+environment 'config.action_mailer.delivery_method = :letter_opener', env: 'development'
 
 file 'config/initializers/rack_attack.rb', <<-RUBY
 class Rack::Attack
