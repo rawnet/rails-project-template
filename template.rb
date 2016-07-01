@@ -70,6 +70,7 @@ end
 gem 'puma'
 gem 'bugsnag'
 gem 'rack-attack'
+gem 'capistrano-slack-notify'
 RUBY
 
 gsub_file 'Gemfile', /(#(.+)\n)?gem ('|")turbolinks('|")\n/, ''
@@ -140,6 +141,7 @@ RUBY
 file 'config/deploy.rb', <<-RUBY
 load 'deploy/assets'
 require 'bundler/capistrano'
+require 'capistrano-slack-notify'
 
 set :default_environment, {
   'PATH' => '$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH'
@@ -161,6 +163,9 @@ set :user, 'rails'
 set(:deploy_to) { File.join('', 'home', user, 'apps', application, stage.to_s) }
 ssh_options[:forward_agent] = true
 
+set :slack_webhook_url, "<slack webhook url starting https://hooks.slack.com>"
+set :slack_room, '<slack channel>'
+
 namespace :deploy do
   task :restart do
     run "kill -USR2 `cat \#{current_path}/tmp/pids/puma.pid`"
@@ -176,14 +181,18 @@ namespace :symlinks do
   task :database do
     symlink "\#{shared_path}/config/database.yml", "\#{release_path}/config/database.yml"
   end
-  
+
   task :secrets do
     symlink "\#{shared_path}/config/secrets.yml", "\#{release_path}/config/secrets.yml"
   end
 end
 
 before "deploy:assets:precompile", "symlinks:database", "symlinks:secrets"
-after "deploy:update", "deploy:cleanup" 
+after "deploy:update", "deploy:cleanup"
+
+before 'deploy', 'slack:starting'
+after  'deploy', 'slack:finished'
+before 'deploy:rollback', 'slack:failed'
 
 require './config/boot'
 RUBY
@@ -221,7 +230,7 @@ List any other enviornment URL here.
 
 ## Getting Started & Running Locally
 
-Detail how to get the project running locally, including any commands, 
+Detail how to get the project running locally, including any commands,
 requirements or 3rd party tools that need to be installed. For Rails projects, this
 may state if the project uses `rails s`, `script/server` or `foreman start`.
 
@@ -264,4 +273,6 @@ Now you just gotta:
 4) Add the project to Code Climate (https://codeclimate.com)
 
 5) Set up a staging environment on Rawnet's Digital Ocean account
+
+6) Add missing info in deploy file
 }
