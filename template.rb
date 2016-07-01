@@ -81,7 +81,7 @@ run 'bundle install'
 environment 'config.middleware.insert_before ActionDispatch::ParamsParser, Rack::Attack'
 environment 'config.action_mailer.delivery_method = :letter_opener', env: 'development'
 
-file 'config/initializers/rack_attack.rb', <<-RUBY
+initializer 'rack_attack.rb', <<-RUBY
 class Rack::Attack
   Rack::Attack.blacklist('block alihack requests') do |req|
     req.path == '/ali.txt'
