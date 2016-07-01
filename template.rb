@@ -228,7 +228,7 @@ Staging: http://staging.url
 
 Production: http://production.url
 
-List any other enviornment URL here.
+List any other environment URL here.
 
 ## Getting Started & Running Locally
 
