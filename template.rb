@@ -25,7 +25,7 @@ if Rails::VERSION::STRING != latest
   say "gem install rails -v#{latest}", :yellow
   puts
   say "Then remove this folder:", :yellow
-  say "rm -rf #{Dir.pwd.shellescape}", :yellow
+  say "rm -rf #{app_name}", :yellow
   puts
   say "And finally regenerate your app:", :yellow
   say "rails #{ARGV.map(&:shellescape).join(' ')}", :yellow
@@ -149,7 +149,7 @@ set :default_environment, {
   'PATH' => '$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH'
 }
 
-set :repository, 'git@github.com:rawnet/<project name>'
+set :repository, 'git@github.com:rawnet/#{app_name}'
 set :deploy_via, :remote_cache
 set :scm, :git
 default_run_options[:pty] = true
@@ -159,7 +159,7 @@ set :default_stage, 'staging'
 require 'capistrano/ext/multistage'
 
 set :use_sudo, false
-set :application, '<project name>'
+set :application, '#{app_name}'
 set :keep_releases, 5
 set :user, 'rails'
 set(:deploy_to) { File.join('', 'home', user, 'apps', application, stage.to_s) }
@@ -263,7 +263,7 @@ say %Q{
 Now you just gotta:
 1) Create a new GitHub repo (https://github.com/new) then:
 
-   git remote add origin git@github.com:rawnet/<project name>
+   git remote add origin git@github.com:rawnet/#{app_name}
    git push -u origin master
 
 2) Create a new project in Bugsnag (https://bugsnag.com), grab the API key and run:
