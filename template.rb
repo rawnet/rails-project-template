@@ -133,6 +133,29 @@ route "root to: 'high_voltage/pages#show', id: 'home'"
 
 run 'cp config/environments/production.rb config/environments/staging.rb'
 
+file '.travis.yml', <<-RUBY
+language: ruby
+rvm:
+  - #{RUBY_VERSION}
+before_script:
+  - createdb #{app_name}_test
+  - cp config/database.yml{.travis,}
+  - cp config/secrets.yml{.travis,}
+  - 'bundle exec bundle-audit update && bundle exec bundle-audit check'
+cache: bundler
+addons:
+  code_climate:
+    repo_token: <add here>
+notifications:
+  slack:
+    on_failure: always
+    on_success: change
+    rooms:
+      - rawnet: <add here>
+after_success:
+  - "[[ $TRAVIS_BRANCH = 'staging' ]] && bundle exec cap staging deploy"
+RUBY
+
 file 'Capfile', <<-RUBY
 load 'deploy'
 load 'config/deploy'
@@ -210,12 +233,25 @@ server '<staging ip address>', :app, :web, :db, primary: true
 RUBY
 
 append_to_file '.gitignore', ".DS_Store\n"
-
-run 'cp config/database.yml{,.example}'
-run 'cp config/secrets.yml{,.example}'
 append_to_file '.gitignore', "config/database.yml\n"
 append_to_file '.gitignore', "config/secrets.yml\n"
 append_to_file '.gitignore', "coverage\n"
+
+run 'cp config/database.yml{,.example}'
+run 'cp config/secrets.yml{,.example}'
+
+file 'config/database.yml.travis', <<-RUBY
+test:
+  adapter: postgresql
+  database: #{app_name}_test
+  encoding: unicode
+  username: travis
+RUBY
+
+file 'config/secrets.yml.travis', <<-RUBY
+test:
+  secret_key_base: 4cb80c379051ae8943eb8d2917f327a7bbdd708b37a211597e737aaf43f56970fbf221a6f98525c5bb06408f349d35b3afb3b40de6e69ffeb2371852fcf5d8b4
+RUBY
 
 remove_file 'README.rdoc'
 # README from https://github.com/rawnet/handbook/blob/master/Back-End/Readme%20Template.md
@@ -268,7 +304,7 @@ Now you just gotta:
 
    rails generate bugsnag <project api key>
 
-3) Add this project to Travis CI
+3) Add this project to Travis CI and add missing details to .travis.yml
 
 4) Add the project to Code Climate (https://codeclimate.com)
 
