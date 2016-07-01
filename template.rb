@@ -275,9 +275,7 @@ Now you just gotta:
 4) Add the project to Code Climate (https://codeclimate.com)
 
 5) Set up a staging environment on Rawnet's Digital Ocean account
-<<<<<<< HEAD
 
 6) Add missing info in deploy file
 }
-
 
