@@ -72,6 +72,7 @@ gem 'puma'
 gem 'puma_worker_killer'
 gem 'bugsnag'
 gem 'rack-attack'
+gem 'capistrano-slack-notify'
 RUBY
 
 gsub_file 'Gemfile', /(#(.+)\n)?gem ('|")turbolinks('|")\n/, ''
@@ -142,6 +143,7 @@ RUBY
 file 'config/deploy.rb', <<-RUBY
 load 'deploy/assets'
 require 'bundler/capistrano'
+require 'capistrano-slack-notify'
 
 set :default_environment, {
   'PATH' => '$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH'
@@ -162,6 +164,9 @@ set :keep_releases, 5
 set :user, 'rails'
 set(:deploy_to) { File.join('', 'home', user, 'apps', application, stage.to_s) }
 ssh_options[:forward_agent] = true
+
+set :slack_webhook_url, "<slack webhook url starting https://hooks.slack.com>"
+set :slack_room, '<slack channel>'
 
 namespace :deploy do
   task :restart do
@@ -186,6 +191,10 @@ end
 
 before "deploy:assets:precompile", "symlinks:database", "symlinks:secrets"
 after "deploy:update", "deploy:migrate", "deploy:cleanup"
+
+before 'deploy', 'slack:starting'
+after  'deploy', 'slack:finished'
+before 'deploy:rollback', 'slack:failed'
 
 require './config/boot'
 RUBY
@@ -266,4 +275,7 @@ Now you just gotta:
 4) Add the project to Code Climate (https://codeclimate.com)
 
 5) Set up a staging environment on Rawnet's Digital Ocean account
+
+6) Add missing info in deploy file
 }
+
