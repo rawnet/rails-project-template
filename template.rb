@@ -59,6 +59,7 @@ group :test, :development do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'simplecov', require: false
+  gem 'bundler-audit'
 end
 
 group :test do
@@ -68,6 +69,7 @@ group :test do
 end
 
 gem 'puma'
+gem 'puma_worker_killer'
 gem 'bugsnag'
 gem 'rack-attack'
 gem 'capistrano-slack-notify'
@@ -188,7 +190,7 @@ namespace :symlinks do
 end
 
 before "deploy:assets:precompile", "symlinks:database", "symlinks:secrets"
-after "deploy:update", "deploy:cleanup"
+after "deploy:update", "deploy:migrate", "deploy:cleanup"
 
 before 'deploy', 'slack:starting'
 after  'deploy', 'slack:finished'
@@ -273,6 +275,9 @@ Now you just gotta:
 4) Add the project to Code Climate (https://codeclimate.com)
 
 5) Set up a staging environment on Rawnet's Digital Ocean account
+<<<<<<< HEAD
 
 6) Add missing info in deploy file
 }
+
+
