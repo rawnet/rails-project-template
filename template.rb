@@ -258,11 +258,15 @@ remove_file 'README.rdoc'
 file 'README.md', <<-MD
 # #{app_name}
 
+<Add Travis Build Badge (click badge in travis to get markdown link)>
+<Add Code Climate Badge (under settings -> badges)>
+<Add Test Coverage Badge  (under settings -> badges)>
+
 Staging: http://staging.url
 
 Production: http://production.url
 
-List any other enviornment URL here.
+List any other environment URL here.
 
 ## Getting Started & Running Locally
 
