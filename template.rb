@@ -153,7 +153,7 @@ notifications:
     rooms:
       - rawnet: <add here>
 after_success:
-  - "[[ $TRAVIS_BRANCH = 'staging' ]] && bundle exec cap staging deploy"
+  - "[[ $TRAVIS_BRANCH = 'master' ]] && bundle exec cap staging deploy"
 RUBY
 
 file 'Capfile', <<-RUBY
