@@ -77,7 +77,7 @@ gsub_file 'app/assets/javascripts/application.js', /\/\/= require turbolinks\n/,
 
 run 'bundle install'
 
-environment 'config.middleware.insert_before ActionDispatch::ParamsParser, Rack::Attack'
+environment 'config.middleware.use Rack::Attack'
 environment 'config.action_mailer.delivery_method = :letter_opener', env: 'development'
 environment 'config.assets.quiet = true', env: 'development'
 
