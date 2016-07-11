@@ -47,7 +47,6 @@ gem 'high_voltage'
 gem_group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'quiet_assets'
   gem 'rack-mini-profiler'
   gem 'letter_opener'
   gem 'capistrano', '~> 2'
@@ -80,6 +79,7 @@ run 'bundle install'
 
 environment 'config.middleware.insert_before ActionDispatch::ParamsParser, Rack::Attack'
 environment 'config.action_mailer.delivery_method = :letter_opener', env: 'development'
+environment 'config.assets.quiet = true', env: 'development'
 
 initializer 'rack_attack.rb', <<-RUBY
 class Rack::Attack
